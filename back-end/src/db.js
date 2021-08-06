@@ -1,14 +1,13 @@
 import { MongoClient } from 'mongodb';
 
 let client;
+const mongoURI = process.env.MONGODB_URI;
 
 export const initializeDbConnection = async () => {
-    client = await MongoClient.connect(
-      'mongodb+srv://reactauthcourse:lTMjSFPo0ZBQE3Vd@reactauth.eawgl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+  client = await MongoClient.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+  });
 }
 
 export const getDbConnection = dbName => {
