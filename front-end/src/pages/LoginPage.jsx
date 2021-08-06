@@ -1,14 +1,29 @@
+import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useToken } from "../auth/useToken";
+
 
 export const LoginPage = () => {
+	const [token, setToken] = useToken();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 	const history = useHistory();
 
 	const onLoginClicked = async () => {
-		alert("Login not implemented yet.")
+		try {
+			const response = await axios.post("/api/login", {
+				email,
+				password
+			});
+			const { token } = response.data;
+
+			setToken(token);
+			history.push("/");
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	return (
