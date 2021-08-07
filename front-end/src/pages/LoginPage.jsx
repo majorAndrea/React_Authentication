@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useToken } from "../auth/useToken";
 
@@ -8,7 +8,7 @@ export const LoginPage = () => {
 	const [token, setToken] = useToken();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState(null);
 	const history = useHistory();
 
 	const onLoginClicked = async () => {
@@ -22,14 +22,23 @@ export const LoginPage = () => {
 			setToken(token);
 			history.push("/");
 		} catch (e) {
-			console.log(e);
+			setErrorMessage("Invalid credentials!");
 		}
 	}
+
+	useEffect(() => {
+		if (errorMessage) {
+			setTimeout(() => {
+				setErrorMessage(null);
+			}, 3000);
+		}
+	}, [errorMessage]);
 
 	return (
 		<div className="content-container">
 			<h1>Login</h1>
 			{errorMessage && <div className="fail">{errorMessage}</div>}
+
 			<input 
 				placeholder="your-email@email.com"
 				value={email}
