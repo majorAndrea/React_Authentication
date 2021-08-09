@@ -2,13 +2,15 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useToken } from "../auth/useToken";
+import { useQueryParams } from "../util/useQueryParams";
 
 export const LoginPage = () => {
-  const [token, setToken] = useToken();
+  const [, setToken] = useToken();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [googleOauthUrl, setGoogleOauthUrl] = useState("");
+  const { token: oAuthToken } = useQueryParams();
   const history = useHistory();
 
   const onLoginClicked = async () => {
@@ -47,6 +49,13 @@ export const LoginPage = () => {
 
     loadOauthUrl();
   }, []);
+
+  useEffect(() => {
+    if (oAuthToken) {
+      setToken(oAuthToken);
+      history.push("/");
+    }
+  }, [oAuthToken, setToken, history]);
 
   return (
     <div className="content-container">
